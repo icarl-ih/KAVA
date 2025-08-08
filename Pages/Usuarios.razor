@@ -1,0 +1,44 @@
+﻿@page "/usuarios"
+
+@using Syncfusion.Blazor.Grids
+@inject IJSRuntime JS
+
+<SfGrid DataSource="@usuarios" AllowPaging="true" AllowSorting="true">
+    <GridColumns>
+        <GridColumn Field="Id_Empleado" HeaderText="ID" Width="100" TextAlign="TextAlign.Center"></GridColumn>
+        <GridColumn Field="NombreCompleto" HeaderText="Nombre" Width="200"></GridColumn>
+        <GridColumn Field="Email" HeaderText="Email" Width="200"></GridColumn>
+        <GridColumn Field="Celular" HeaderText="Celular" Width="150"></GridColumn>
+        <GridColumn Field="Licenciatura" HeaderText="Licenciatura" Width="150"></GridColumn>
+        <GridColumn Field="Cedula" HeaderText="Cédula" Width="100"></GridColumn>
+        <GridColumn Field="FechaNac" HeaderText="Fecha Nac." Width="150" Format="d"></GridColumn>
+        <GridColumn Field="Posgrados" HeaderText="Posgrados" Width="150"></GridColumn>
+        <GridColumn Field="Id_Cargo" HeaderText="ID Cargo" Width="100"></GridColumn>
+    </GridColumns>
+</SfGrid>
+
+@code {
+    List<Usuario> usuarios = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        usuarios = await JS.InvokeAsync<List<Usuario>>("firestoreInterop.getUsuarios");
+    }
+
+    public class Usuario
+    {
+        public int Id_Empleado { get; set; }
+        public string A_Paterno { get; set; }
+        public string A_Materno { get; set; }
+        public string Nombres { get; set; }
+        public string Email { get; set; }
+        public long Celular { get; set; }
+        public string Licenciatura { get; set; }
+        public int Cedula { get; set; }
+        public DateTime FechaNac { get; set; }
+        public string Posgrados { get; set; }
+        public int Id_Cargo { get; set; }
+
+        public string NombreCompleto => $"{A_Paterno} {A_Materno} {Nombres}";
+    }
+}
